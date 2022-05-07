@@ -1,24 +1,26 @@
 <?php
 
-require '../config.php';
+require './connect.php';
 
-$mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
 
-if(mysqli_connect_errno()){
-    return 'Ошибка при подключении к базе данных('.mysqli_connect_errno().' ):'.mysqli_connect_error();
+
+
+function getNews(string $inputName, object $connect, $newsType): object{
+    $addingToRequest = '';
+
+    if (!is_null($newsType)) {
+        $addingToRequest = " AND news_type.title='$newsType'";
+    }
+
+    $news = mysqli_query($connect, "SELECT news.id, news.title as news_title,
+                                       news_type.title as news_type
+                                       FROM news LEFT JOIN news_type 
+                                       ON news.id_news_type=news_type.id
+                                       WHERE news.title='$inputName'".$addingToRequest);
+    mysqli_close($connect);
+    return $news;
+
 }
 
 
 
-//function getNewsByName($inputName, $newsType = NULL): array{
-//
-//}
-
-$result = mysqli_query($mysqli, "SELECT news.title as news_name,
-                                       news_type.title as news_type
-                                       FROM news LEFT JOIN news_type 
-                                       ON news.id_news_type=news_type.id
-                                       WHERE news_type.title='Новость'");
-
-
-var_dump($result);

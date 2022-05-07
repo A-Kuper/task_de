@@ -12,6 +12,13 @@
         <label>
             <input type="text" name="search" placeholder="Введите имя новсоти">
         </label>
+        <select name="type">
+            <option value="Выбрать">Выбрать...</option>
+            <option value="Новость">Новость</option>
+            <option value="Статья">Статья</option>
+            <option value="Пресс-релиз">Пресс-релиз</option>
+            <option value="Объявление">Объявление</option>
+        </select>
         <button type="submit">Поиск</button>
     </form>
 </body>
