@@ -8,6 +8,11 @@
     <title>Task</title>
 </head>
 <body>
-<?php phpinfo();?>
+    <form method="GET" action="/lib/news.php">
+        <label>
+            <input type="text" name="search" placeholder="Введите имя новсоти">
+        </label>
+        <button type="submit">Поиск</button>
+    </form>
 </body>
 </html>
