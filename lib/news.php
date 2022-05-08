@@ -1,28 +1,40 @@
 <?php
+/**@var $mysqli is variable mysql.php*/
+
 
 require_once './mysql.php';
 
 session_start();
 
-if (isset($_GET['search'])) {
-    $_SESSION['input_name'] = $_GET['search'];
-}else echo 'Введите название новостей для поиска.';
-
-if (isset($_GET['type']) && $_GET['type'] !== 'Выбрать') {
-    $_SESSION['selected_type'] = $_GET['type'];
-
-}else $_SESSION['selected_type'] = NULL;
-
 $arr = [];
 
-$news = getNews($_SESSION['input_name'], $mysqli, $_SESSION['selected_type']);
-while ($obj = mysqli_fetch_object($news)) {
-    $arr[$obj->id]['news_title'] = $obj->news_title;
-    $arr[$obj->id]['news_type'] = $obj->news_type;
+if (isset($_GET['type'])) {
+    if (($_GET['type']) === 'Не выбрано') {
+        if (empty($_GET['search'])) {
+            echo 'Выберите название и/или тип новсти для поиска.';
+        }else{
+            $_SESSION['news_title'] = $_GET['search'];
+            $news = getNews($mysqli, NULL, $_SESSION['news_title']);
+            $arr = handleNews($news);
+        }
+    } else {
+        $_SESSION['news_type'] = $_GET['type'];
+        if (empty($_GET['search'])) {
+            $news = getNews($mysqli, $_SESSION['news_type'], NULL);
+        }else {
+            $_SESSION['news_title'] = $_GET['search'];
+            $news = getNews($mysqli, $_SESSION['news_type'], $_SESSION['news_title']);
+        }
+        $arr = handleNews($news);
+    }
 }
 
 
 echo '<pre>';
-print_r($arr);
+var_dump($arr);
 echo '</pre>';
 
+
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
