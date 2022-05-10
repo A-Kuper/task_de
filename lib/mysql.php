@@ -4,6 +4,7 @@ require $_SERVER['DOCUMENT_ROOT'].'/lib/connect.php';
 
 
 /**
+ * Получаем отфильтрованный список новостей на странице news.php
  * @param mysqli $connect
  * @param string|null $newsType
  * @param string|null $newsTitle
@@ -35,7 +36,12 @@ function getNewsFromNewsPhp(mysqli $connect, ?string $newsType, ?string $newsTit
 }
 
 
-
+/**
+ * Получаем полный список новостей на странице index.php
+ * @param mysqli $connect
+ * @param int $offset
+ * @return mysqli_result
+ */
 function getNewsFromIndexPhp(mysqli $connect, int $offset): mysqli_result
 {
     $news = mysqli_query($connect, "SELECT SQL_CALC_FOUND_ROWS news.id, news.title as news_title,
@@ -49,6 +55,13 @@ function getNewsFromIndexPhp(mysqli $connect, int $offset): mysqli_result
 }
 
 
+/**
+ * Считаем количество новостей при поиске с фильтрацией
+ * @param mysqli $connect
+ * @param string|null $newsType
+ * @param string|null $newsTitle
+ * @return array|false|null
+ */
 function countTotalNewsForOutputByFilter(mysqli $connect, ?string $newsType, ?string $newsTitle)
 {
     if (is_null($newsType)) {
@@ -73,6 +86,11 @@ function countTotalNewsForOutputByFilter(mysqli $connect, ?string $newsType, ?st
 }
 
 
+/**
+ * Считаем количество новостей при поиске без фильтрации
+ * @param mysqli $connect
+ * @return array
+ */
 function countTotalNewsForOutputWithoutFilter(mysqli $connect): array
 {
     $news = mysqli_query($connect, "SELECT COUNT(news.id)
@@ -84,8 +102,11 @@ function countTotalNewsForOutputWithoutFilter(mysqli $connect): array
 }
 
 
-
-
+/**
+ * Приводим object к array и заполняем массив интересующими нас полями
+ * @param mysqli_result $news
+ * @return array
+ */
 function handleNews(mysqli_result $news): array
 {
     $handledNews = [];
@@ -96,17 +117,6 @@ function handleNews(mysqli_result $news): array
 
     return $handledNews;
 }
-
-
-
-//$Result=mysqli_query($mysqli,"SELECT SQL_CALC_FOUND_ROWS  id From news LIMIT 10");
-//$NORResult=mysqli_query($mysqli,"Select FOUND_ROWS()");
-//$NORRow=mysqli_fetch_array($NORResult);
-//$NOR=$NORRow["FOUND_ROWS()"];
-//
-//var_dump($NOR);
-
-
 
 
 

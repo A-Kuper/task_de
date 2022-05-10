@@ -1,6 +1,5 @@
 <?php
 
-require 'config.php';
 require './lib/mysql.php';
 require './lib/connect.php';
 
@@ -9,7 +8,7 @@ $page = $_GET['page'] ?? 1;
 $offset = LIMIT * ($page - 1);
 
 $totalNews = countTotalNewsForOutputWithoutFilter($mysqli);
-$totalPages = round(array_shift($totalNews)/LIMIT, 0);
+$totalPages = ceil(array_shift($totalNews)/LIMIT);
 
 $news = getNewsFromIndexPhp($mysqli, $offset);
 $handledNews = handleNews($news);
@@ -51,8 +50,12 @@ $handledNews = handleNews($news);
         </div><br/>
     <?php
     }
-
+    for($i = 1; $i < $totalPages+1; $i++){
+        echo "<a href='index.php?page=$i'>$i </a>";
+    }
     ?>
 
 </body>
 </html>
+
+
